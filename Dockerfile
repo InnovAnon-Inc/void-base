@@ -4,6 +4,8 @@ RUN sleep 91                  \
  && xbps-install   -y         \
       autoconf                \
       automake                \
+      binutils                \
+      clang                   \
       cross-x86_64-linux-gnu  \
       cmake                   \
       curl                    \
@@ -12,7 +14,10 @@ RUN sleep 91                  \
       gmp-devel               \
       isl-devel               \
       libmpc-devel            \
+      libtool                 \
+      llvm                    \
       make                    \
+      m4                      \
       mpfr-devel              \
       ninja                   \
       upx                     \

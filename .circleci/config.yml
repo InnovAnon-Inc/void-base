@@ -61,6 +61,7 @@ jobs:
           name: Push upstream (void-pgo)
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              sleep 91
               curl --location --request POST \
                 'https://circleci.com/api/v2/project/github/InnovAnon-Inc/void-pgo/pipeline' \
                 --header 'Content-Type: application/json' \
