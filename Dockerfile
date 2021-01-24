@@ -20,6 +20,7 @@ RUN sleep 91                  \
       m4                      \
       mpfr-devel              \
       ninja                   \
+      perf                    \
       upx                     \
  && git config --global http.proxy $SOCKS_PROXY
 
