@@ -24,7 +24,8 @@ RUN sleep 91                  \
       perf                    \
       upx                     \
  && git config --global http.proxy $SOCKS_PROXY \
- && git clone --depth=1 --recursive https://github.com/google/autofdo.git \
+ && git clone --depth=1 --recursive -b 0.19                               \
+                                    https://github.com/google/autofdo.git \
  && cd                                                        autofdo     \
  && aclocal -I .                                                          \
  && autoheader                                                            \
