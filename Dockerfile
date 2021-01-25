@@ -10,6 +10,7 @@ RUN sleep 91                  \
       cross-x86_64-linux-gnu  \
       cmake                   \
       curl                    \
+      elfutils-devel          \
       gcc                     \
       git                     \
       gmp-devel               \
