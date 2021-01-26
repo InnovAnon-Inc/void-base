@@ -24,19 +24,19 @@ RUN sleep 91                  \
       ninja                   \
       perf                    \
       upx                     \
- && git config --global http.proxy $SOCKS_PROXY \
- && git clone --depth=1 --recursive -b 0.19                               \
-                                    https://github.com/google/autofdo.git \
- && cd                                                        autofdo     \
- && aclocal -I .                                                          \
- && autoheader                                                            \
- && autoconf                                                              \
- && automake --add-missing -c                                             \
- && ./configure                                                           \
- && make -j1                                                              \
- && make install                                                          \
- && cd ..                                                                 \
- && rm -rf                                                    autofdo
+ && git config --global http.proxy $SOCKS_PROXY
+# && git clone --depth=1 --recursive -b 0.19                               \
+#                                    https://github.com/google/autofdo.git \
+# && cd                                                        autofdo     \
+# && aclocal -I .                                                          \
+# && autoheader                                                            \
+# && autoconf                                                              \
+# && automake --add-missing -c                                             \
+# && ./configure                                                           \
+# && make -j1                                                              \
+# && make install                                                          \
+# && cd ..                                                                 \
+# && rm -rf                                                    autofdo
 
 FROM scratch as squash
 COPY --from=builder / /
