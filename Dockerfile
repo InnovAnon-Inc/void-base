@@ -1,5 +1,6 @@
 FROM innovanon/voidlinux as builder
 WORKDIR /tmp
+COPY ./llvm.grm ./
 RUN sleep 91                  \
  && xbps-install -Suy         \
  && xbps-install   -y         \
