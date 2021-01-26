@@ -23,6 +23,7 @@ RUN sleep 91                  \
       mpfr-devel              \
       ninja                   \
       perf                    \
+      polygen                 \
       upx                     \
  && git config --global http.proxy $SOCKS_PROXY
 # && git clone --depth=1 --recursive -b 0.19                               \
