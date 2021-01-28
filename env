@@ -1,0 +1,89 @@
+#! /bin/sh
+if [ ! -n "$HAVE_ENV" ] ; then
+  CHOST=x86_64-linux-gnu
+  CC=$CHOST-gcc
+  CXX=$CHOST-g++
+  FC=$CHOST-gfortran
+  NM=$CC-nm
+  AR=$CC-ar
+  RANLIB=$CC-ranlib
+  STRIP=$CHOST-strip
+
+  CPPFLAGS="$CPPFLAGS"
+    CFLAGS="$CFLAGS"
+  CXXFLAGS="$CXXFLAGS"
+   LDFLAGS="$LDFLAGS"
+
+  PREFIX=/opt/cpuminer
+  temp="$PREFIX/include"
+  CPPFLAGS="-I$temp $CPPFLAGS"
+  CPATH="$temp:$CPATH"
+  C_INCLUDE_PATH="$temp:$C_INCLUDE_PATH"
+  OBJC_INCLUDE_PATH="$temp:$OBJC_INCLUDE_PATH"
+  unset temp
+
+  temp="$PREFIX/lib"
+  LDFLAGS="-L$temp $LDFLAGS"
+  LIBRARY_PATH="$temp:$LIBRARY_PATH"
+  LD_LIBRARY_PATH="$temp:$LD_LIBRARY_PATH"
+  LD_RUN_PATH="$temp:$LD_RUN_PATH"
+  unset temp
+
+  PKG_CONFIG_LIBDIR="$PREFIX/lib/pkgconfig:$PKG_CONFIG_LIBDIR"
+  PKG_CONFIG_PATH="$PREFIX/share/pkgconfig:$PKG_CONFIG_LIBDIR:$PKG_CONFIG_PATH"
+
+  # architecture-specific
+  [ -n "$ARCH" ]
+  if [ "$ARCH" != generic ] ; then
+    CFLAGS="-march=$ARCH -mtune=$ARCH $CFLAGS"
+  fi
+  CPPFLAGS="-DUSE_ASM $CPPFLAGS"
+
+  # debug
+  CPPFLAGS="-DNDEBUG $CPPFLAGS"
+  CFLAGS="-Ofast -g0 $CFLAGS"
+
+  # LTO
+  temp='-fuse-linker-plugin -flto'
+  #temp='-fuse-linker-plugin -flto -ffat-lto-objects'
+   CFLAGS="$temp $CFLAGS"
+  LDFLAGS="$temp $LDFLAGS"
+  unset temp
+
+  # dead code strip
+  CFLAGS="-ffunction-sections -fdata-sections $CFLAGS"
+  #LDFLAGS="-Wl,-s -Wl,-Bsymbolic -Wl,--gc-sections $LDFLAGS"
+  LDFLAGS="-Wl,-Bsymbolic -Wl,--gc-sections $LDFLAGS"
+
+  # optimize
+  CLANGFLAGS="-ffast-math -fassociative-math -freciprocal-math -fmerge-all-constants $CFLAGS"
+  CFLAGS="-fipa-pta -floop-nest-optimize -fgraphite-identity -floop-parallelize-all $CLANGFLAGS"
+  CLANGLDFLAGS="$LDFLAGS"
+
+  # profile
+  temp='-fipa-profile -fprofile-reorder-functions -fvpt -fprofile -fprofile-arcs'
+    if [ "$ENV_OPT" -eq 1 ] ; then # PGO
+    temp="$temp -fprofile-dir=/var/cpuminer -pg -fprofile-abs-path"
+      CFLAGS="$temp  $CFLAGS"
+     LDFLAGS="$temp $LDFLAGS"
+  elif [ "$ENV_OPT" -eq 2 ] ; then # PGO (stage 2)
+    temp="$temp -fprofile-dir=/var/cpuminer -fprofile-use -fprofile-correction"
+      CFLAGS="$temp  $CFLAGS"
+     LDFLAGS="$temp $LDFLAGS"
+  elif [ "$ENV_OPT" -eq 3 ]
+    || [ "$ENV_OPT" -eq 4 ] ; then # FDO
+      CFLAGS="$temp  $CFLAGS"
+     LDFLAGS="$temp $LDFLAGS"
+  fi
+  unset temp
+
+  # static
+  LDFLAGS="$LDFLAGS -static -static-libgcc -static-libstdc++"
+  CLANGLDFLAGS="$CLANGLDFLAGS -static -static-libgcc -static-libstdc++"
+
+  CLANGXXFLAGS="$CLANGFLAGS $CXXFLAGS"
+  CXXFLAGS="$CFLAGS $CXXFLAGS"
+
+  export CHOST CC CXX FC NM AR RANLIB STRIP CPPFLAGS CXXFLAGS CFLAGS LDFLAGS PREFIX CPATH C_INCLUDE_PATH OBJC_INCLUDE_PATH LIBRARY_PATH LD_LIBRARY_PATH LD_RUN_PATH PKG_CONFIG_LIBDIR PKG_CONFIG_PATH CLANGFLAGS CLANGXXFLAGS CLANGLDFLAGS
+fi
+

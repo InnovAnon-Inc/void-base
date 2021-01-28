@@ -57,16 +57,6 @@ jobs:
                 --header 'Content-Type: application/json' \
                 -u "${API_TOKEN}:"
             fi
-      - run:
-          name: Push upstream (void-pgo)
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              sleep 91
-              curl --location --request POST \
-                'https://circleci.com/api/v2/project/github/InnovAnon-Inc/void-pgo/pipeline' \
-                --header 'Content-Type: application/json' \
-                -u "${API_TOKEN}:"
-            fi
       - slack/notify:
           event: fail
           mentions: '@InnovAnon-Inc'
