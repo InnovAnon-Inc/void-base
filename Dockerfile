@@ -7,7 +7,6 @@ RUN sleep 91                  \
       automake                \
       binutils                \
       clang                   \
-      cross-x86_64-linux-gnu  \
       cmake                   \
       curl                    \
       elfutils-devel          \
